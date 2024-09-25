@@ -3,7 +3,7 @@
 
 class country_us(object):
     '''
-    Sk8er-stuff search functions only works per state, so we need a list of
+    Sk8erstuff.com search functions only works per state, so we need a list of
     every state in the US. There is an expectation that this will be used
     in other areas as well.
     '''
