@@ -98,12 +98,17 @@ def pull_arena_guide_pages():
 def pull_arena_guide_content():
     '''
     Take the amount of pages we have, and build a loop
-    Currently only returns a list of addresses.
+    For each page, build a list of names and addresses
+    Appened a dict with name and address on every rink
+    Return a list of dicts
     '''
 
     page_number = 20
     pages = pull_arena_guide_pages()
     rinks = []
+    rink_names = []
+    rink_addresses = []
+
     for i in range(pages):
         page_number = i + 1
         content = arena_guide_request(page_number)
@@ -111,15 +116,34 @@ def pull_arena_guide_content():
         main = soup.find_all('div', class_="jet-listing-grid jet-listing")
 
         for entry in main:
-            # rink_name = entry.find_all('h2') # returns rink names
+            # returns a list of rink names with html
+            rink_name = entry.find_all('h2')
+            # retuns a list of rink addresses with html
             rink_address = entry.find_all('span', class_="elementor-icon-list-text")
+
+            # if the find_all failed, the text.strip will fail
+            # for now, we dont care.
+            for rink in rink_name:
+                if rink is None:
+                    pass
+                else:
+                    rink_names.append(rink.text.strip())
+
             for addr in rink_address:
                 if addr is None:
                     pass
                 else:
                     location = addr.text.strip()
+                    # knock out any website URL's for now
                     if 'http' not in location:
-                        rinks.append(location)
+                        rink_addresses.append(location)
+
+            #get the sizes of both name/address lists for comparing
+            rink_names_size = len(rink_names)
+            rink_addresses_size = len(rink_addresses)
+            if rink_names_size == rink_addresses_size:
+                for x in range(rink_names_size):
+                    rinks.append({'name': rink_names[x], 'address': rink_addresses[x]})
 
     return rinks
 
