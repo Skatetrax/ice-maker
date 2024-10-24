@@ -138,16 +138,16 @@ def pull_arena_guide_content():
                     if 'http' not in location:
                         rink_addresses.append(location)
 
-            #get the sizes of both name/address lists for comparing
-            rink_names_size = len(rink_names)
-            rink_addresses_size = len(rink_addresses)
-            if rink_names_size == rink_addresses_size:
-                for x in range(rink_names_size):
-                    rinks.append({'name': rink_names[x], 'address': rink_addresses[x]})
+    #get the sizes of both name/address lists for comparing
+    rink_names_size = len(rink_names)
+    rink_addresses_size = len(rink_addresses)
+    if rink_names_size == rink_addresses_size:
+        for x in range(rink_names_size):
+            rinks.append({'name': rink_names[x], 'address': rink_addresses[x]})
 
     return rinks
 
 # uncomment below for testing/trying
-# data = pull_arena_guide_content()
-# print(data)
+#data = pull_arena_guide_content()
+#print(data)
 # print(len(data))
