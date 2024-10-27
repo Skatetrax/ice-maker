@@ -17,7 +17,7 @@ class country_us(object):
         # https://en.wikipedia.org/wiki/List_of_states_and_territories_of_the_United_States#Federal_district.
         "DC",
         # https://en.wikipedia.org/wiki/List_of_states_and_territories_of_the_United_States#Inhabited_territories.
-        "AS", "GU", "MP", "PR", "VI",    
+        "AS", "GU", "MP", "PR", "VI",
     ]
 
     us_state_to_abbrev = {

@@ -20,9 +20,9 @@ def address_formatter(x):
     try:
         address = usaddress.tag(address)
         address = address[0]
-
+        street = address['StreetName'] + ' ' + address['StreetNamePostType']
         results = {
-            'street': address['StreetName'] + ' ' + address['StreetNamePostType'],
+            'street': street,
             'city': address['PlaceName'],
             'state': address['StateName']
             }
@@ -59,7 +59,7 @@ df['state'] = df.apply(lambda row: row.Address['state'], axis=1)
 # convert any full length state name to two letter abbreviation
 df['state'] = df['state'].map(lambda x: states.get(x, x))
 
-# delete the old address blob to save space and drop any remaining dupes
+# delete the old address blob to clean up & drop any remaining dupes
 df = df.drop('Address', axis=1)
 df = df.drop_duplicates()
 
