@@ -61,12 +61,12 @@ def aggr_sk8erstuff():
     states = common.country_us.states
     for state in states:
         rinks = pull_sk8trstuff(state)
-        print(rinks)
+        #print(rinks)
 
 
-rinks = pull_sk8trstuff('pa')
-for ice in rinks:
-    print(ice)
+#rinks = pull_sk8trstuff('pa')
+#for ice in rinks:
+    #print(ice)
 #    print(usaddress.parse(ice['street']))
 
 # aggr_sk8erstuff()
