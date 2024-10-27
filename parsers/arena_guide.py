@@ -1,6 +1,8 @@
 import bs4
 import requests
 import json
+import csv
+import re
 
 
 def arena_guide_request(page_number):
@@ -133,7 +135,14 @@ def pull_arena_guide_content():
                 if addr is None:
                     pass
                 else:
+                    # remove unneeded, inconsitent country and zip data
+                    # these are/should be unique to the arena-guide data source
                     location = addr.text.strip()
+                    location = location.removesuffix("United States of America").strip()
+                    location = location.removesuffix("United States").strip()
+                    location = location.removesuffix("USA").strip()
+                    location = re.sub(r"\s?\d+$", "", location).strip()
+                    location = location.rstrip(',')
                     # knock out any website URL's for now
                     if 'http' not in location:
                         rink_addresses.append(location)
@@ -147,7 +156,18 @@ def pull_arena_guide_content():
 
     return rinks
 
-# uncomment below for testing/trying
-#data = pull_arena_guide_content()
-#print(data)
-# print(len(data))
+
+def arena_guide_csv(path):
+    '''
+    produces a csv file of the data pulled directly from sk8stuff.
+    use this file as a cache or direct data processing
+    '''
+    data = pull_arena_guide_content()
+
+    with open(path, 'w', encoding='utf8', newline='') as output_file:
+        fc = csv.DictWriter(
+            output_file,
+            fieldnames=data[0].keys(),
+            delimiter=';'
+            )
+        fc.writerows(data)
