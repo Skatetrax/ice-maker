@@ -136,3 +136,27 @@ class country_us(object):
         "UM": "UM",
         "VI": "VI",
         }
+
+    st_abbr = {
+        'DR': 'DRIVE',
+        'RD': 'ROAD',
+        'BLVD': 'BOULEVARD',
+        'ST': 'STREET',
+        'STE': 'SUITE',
+        'APTS': 'APARTMENTS',
+        'APT': 'APARTMENT',
+        'CT': 'COURT',
+        'LN': 'LANE',
+        'AVE': 'AVENUE',
+        'CIR': 'CIRCLE',
+        'PKWY': 'PARKWAY',
+        'HWY': 'HIGHWAY',
+        'SQ': 'SQUARE',
+        'BR': 'BRIDGE',
+        'LK': 'LAKE',
+        'MT': 'MOUNT',
+        'MTN': 'MOUNTAIN',
+        'PL': 'PLACE',
+        'RTE': 'ROUTE',
+        'TR': 'TRAIL'
+        }
