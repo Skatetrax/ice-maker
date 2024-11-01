@@ -28,7 +28,9 @@ def aggr_lts():
         stateID = i + 1
         state_data = pull_lts_data(stateID)
         for rink in state_data:
-            rinks.append(rink)
+            update_rink = {"Name": ' '}
+            update_rink.update(rink)
+            rinks.append(update_rink)
 
     return rinks
 
@@ -42,6 +44,6 @@ def lts_csv(path):
             output_file,
             extrasaction='ignore',
             delimiter=';',
-            fieldnames=['StreetOne', 'City', 'StateCode']
+            fieldnames=['Name', 'StreetOne', 'City', 'StateCode']
             )
         fc.writerows(rinks)
