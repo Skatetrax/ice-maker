@@ -1,6 +1,7 @@
 import pandas as pd
 import usaddress
 import numpy as np
+from utils import common
 
 
 def address_formatter(x):
@@ -31,6 +32,7 @@ def process_sk8stuff():
 
     # drop any obvious dupes, they're going to happen
     # and apply some normalization to the address section
+    df['street'] = df['street'].map(common.country_us._lookup_words)
     df = df.drop_duplicates()
     df['street'] = df['street'].apply(address_formatter)
     df['street'] = df.apply(lambda row: row.street['street'], axis=1)
