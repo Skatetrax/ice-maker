@@ -138,25 +138,43 @@ class country_us(object):
         }
 
     st_abbr = {
-        'DR': 'DRIVE',
-        'RD': 'ROAD',
-        'BLVD': 'BOULEVARD',
-        'ST': 'STREET',
-        'STE': 'SUITE',
-        'APTS': 'APARTMENTS',
         'APT': 'APARTMENT',
-        'CT': 'COURT',
-        'LN': 'LANE',
+        'APTS': 'APARTMENTS',
         'AVE': 'AVENUE',
-        'CIR': 'CIRCLE',
-        'PKWY': 'PARKWAY',
-        'HWY': 'HIGHWAY',
-        'SQ': 'SQUARE',
+        'BLVD': 'BOULEVARD',
         'BR': 'BRIDGE',
+        'CIR': 'CIRCLE',
+        'CT': 'COURT',
+        'DR': 'DRIVE',
+        'HWY': 'HIGHWAY',
+        'HW': 'HIGHWAY',
         'LK': 'LAKE',
+        'LN': 'LANE',
+        'RD': 'ROAD',
         'MT': 'MOUNT',
         'MTN': 'MOUNTAIN',
+        'PKWY': 'PARKWAY',
         'PL': 'PLACE',
         'RTE': 'ROUTE',
+        'SQ': 'SQUARE',
+        'ST': 'STREET',
+        'STE': 'SUITE',
+        'TPKE': 'TURNPIKE',
         'TR': 'TRAIL'
         }
+
+    def _lookup_words(input_text):
+        abbr_dict = country_us.st_abbr
+
+        try:
+            words = input_text.upper().split()
+            new_words = []
+            for word in words:
+                if word.upper() in abbr_dict:
+                    word = abbr_dict[word.upper()]
+                new_words.append(word)
+            new_text = " ".join(new_words)
+        except:
+            new_text = input_text
+
+        return new_text
