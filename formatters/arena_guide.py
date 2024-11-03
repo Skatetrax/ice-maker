@@ -39,6 +39,9 @@ def process_arena_guide():
 
     # drop any obvious dupes, they're going to happen
     # and apply some normalization to the address section
+
+    df['city'] = df['city'].apply(common.country_us._remove_punctuation)
+    df['street'] = df['street'].apply(common.country_us._remove_punctuation)
     df = df.drop_duplicates()
     df['Address'] = df['Address'].apply(address_formatter)
 
@@ -49,6 +52,7 @@ def process_arena_guide():
 
     # convert any full length state name to two letter abbreviation
     df['state'] = df['state'].map(lambda x: states.get(x, x))
+    df['street'] = df['street'].map(common.country_us._lookup_words)
 
     # remove any row w/o all fields preset (because they failed to parse)
     df = df.dropna()

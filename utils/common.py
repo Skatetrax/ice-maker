@@ -1,3 +1,6 @@
+import re
+
+
 # add some locale data
 
 
@@ -178,3 +181,10 @@ class country_us(object):
             new_text = input_text
 
         return new_text
+
+    def _remove_punctuation(input_text):
+        try:
+            output_text = re.sub(r'[^\w\s]', '', input_text)
+        except:
+            output_text = input_text
+        return output_text
