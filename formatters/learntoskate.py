@@ -30,6 +30,9 @@ def process_lts():
                     engine='python',
                     names=["name", "street", "city", "state"])
 
+    # remove any UTF-8 wierdness from WP scraping
+    df['name'] = df['name'].apply(common.reset_utf8)
+
     # drop any obvious dupes, they're going to happen
     # and apply some normalization to the address section
     df['city'] = df['city'].apply(common.country_us._remove_punctuation)

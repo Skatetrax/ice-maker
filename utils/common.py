@@ -188,3 +188,11 @@ class country_us(object):
         except:
             output_text = input_text
         return output_text
+
+
+def reset_utf8(input_text):
+    try:
+        output_text = input_text.encode('ISO-8859-1').decode('utf8')
+    except:
+        output_text = input_text
+    return output_text
