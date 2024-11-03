@@ -13,6 +13,7 @@ def address_formatter(x):
         address = usaddress.tag(address)
         address = address[0]
         street = address['StreetName'] + ' ' + address['StreetNamePostType']
+        street = common.country_us._remove_punctuation(street)
         results = {
             'street': street,
             'city': address['PlaceName'],
