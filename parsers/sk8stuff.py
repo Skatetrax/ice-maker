@@ -1,7 +1,7 @@
-from utils import common
-import requests
 import bs4
+import requests
 import csv
+import utils.common as common
 
 
 def pull_sk8stuff(state):
