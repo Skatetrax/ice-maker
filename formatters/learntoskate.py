@@ -21,17 +21,17 @@ def address_formatter(x):
     return results
 
 
-def process_sk8stuff():
-    csv_data = '/tmp/ice-maker_raw_csv_sk8stuff.csv'
+def process_lts():
+    csv_data = '/tmp/ice-maker_raw_csv_lts.csv'
 
     # Load the data of csv
     df = pd.read_csv(csv_data,
                     sep=';',
                     engine='python',
-                    names=["Name", "street", "city", "state"])
+                    names=["name", "street", "city", "state"])
 
     # remove any UTF-8 wierdness from WP scraping
-    df['Name'] = df['Name'].apply(common.reset_utf8)
+    df['name'] = df['name'].apply(common.reset_utf8)
 
     # drop any obvious dupes, they're going to happen
     # and apply some normalization to the address section
@@ -42,7 +42,7 @@ def process_sk8stuff():
     df['street'] = df['street'].apply(address_formatter)
     df['street'] = df.apply(lambda row: row.street['street'], axis=1)
 
-    df['Name'] = df['Name'].apply(common.country_us._expand_rec_ctrs)
+    df['name'] = df['name'].apply(common.country_us._expand_rec_ctrs)
 
     # remove any row w/o all fields preset (because they failed to parse)
     df = df.dropna()
