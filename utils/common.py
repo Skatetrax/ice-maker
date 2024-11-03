@@ -1,6 +1,3 @@
-import re
-
-
 # add some locale data
 
 
@@ -141,74 +138,25 @@ class country_us(object):
         }
 
     st_abbr = {
-        'APT': 'APARTMENT',
-        'APTS': 'APARTMENTS',
-        'AVE': 'AVENUE',
-        'BLVD': 'BOULEVARD',
-        'BR': 'BRIDGE',
-        'CIR': 'CIRCLE',
-        'CT': 'COURT',
         'DR': 'DRIVE',
-        'HWY': 'HIGHWAY',
-        'HW': 'HIGHWAY',
-        'LK': 'LAKE',
-        'LN': 'LANE',
         'RD': 'ROAD',
-        'MT': 'MOUNT',
-        'MTN': 'MOUNTAIN',
-        'PKWY': 'PARKWAY',
-        'PL': 'PLACE',
-        'RTE': 'ROUTE',
-        'SQ': 'SQUARE',
+        'BLVD': 'BOULEVARD',
         'ST': 'STREET',
         'STE': 'SUITE',
-        'TPKE': 'TURNPIKE',
+        'APTS': 'APARTMENTS',
+        'APT': 'APARTMENT',
+        'CT': 'COURT',
+        'LN': 'LANE',
+        'AVE': 'AVENUE',
+        'CIR': 'CIRCLE',
+        'PKWY': 'PARKWAY',
+        'HWY': 'HIGHWAY',
+        'SQ': 'SQUARE',
+        'BR': 'BRIDGE',
+        'LK': 'LAKE',
+        'MT': 'MOUNT',
+        'MTN': 'MOUNTAIN',
+        'PL': 'PLACE',
+        'RTE': 'ROUTE',
         'TR': 'TRAIL'
         }
-
-    def _lookup_words(input_text):
-        abbr_dict = country_us.st_abbr
-
-        try:
-            words = input_text.upper().split()
-            new_words = []
-            for word in words:
-                if word.upper() in abbr_dict:
-                    word = abbr_dict[word.upper()]
-                new_words.append(word)
-            new_text = " ".join(new_words)
-        except:
-            new_text = input_text
-
-        return new_text
-
-    def _remove_punctuation(input_text):
-        try:
-            output_text = re.sub(r'[^\w\s]', '', input_text)
-        except:
-            output_text = input_text
-        return output_text
-
-    def _expand_rec_ctrs(input_text):
-        abbr_dict = {'rec': 'recreation', 'ctr': 'center'}
-
-        try:
-            words = input_text.casefold().split()
-            new_words = []
-            for word in words:
-                if word.casefold() in abbr_dict:
-                    word = abbr_dict[word.casefold()]
-                new_words.append(word)
-            new_text = " ".join(new_words).title()
-        except:
-            new_text = input_text
-
-        return new_text
-
-
-def reset_utf8(input_text):
-    try:
-        output_text = input_text.encode('ISO-8859-1').decode('utf8')
-    except:
-        output_text = input_text
-    return output_text

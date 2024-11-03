@@ -1,7 +1,5 @@
 from formatters import sk8stuff as sk8stuff
 from formatters import arena_guide as arena_guide
-from formatters import learntoskate
-
 from datetime import datetime
 import pandas as pd
 import argparse
@@ -18,19 +16,6 @@ def generate_arena_guide():
     df = pd.DataFrame(arena_guide.process_arena_guide())
     df = df.assign(Date=datetime.now())
     df = df.assign(Source='Arena-Guide')
-    print("Generating report to", report)
-    df.to_csv(report, sep=';', encoding='utf-8', index=False, header=False)
-
-    return df
-
-
-def generate_learntoskate():
-
-    report = '/tmp/ice-maker_formatted_lts.csv'
-
-    df = pd.DataFrame(learntoskate.process_lts())
-    df = df.assign(Date=datetime.now())
-    df = df.assign(Source='LTS')
     print("Generating report to", report)
     df.to_csv(report, sep=';', encoding='utf-8', index=False, header=False)
 
@@ -57,20 +42,18 @@ if args['source'] == 'sk8stuff':
 elif args['source'] == 'arena_guide':
     generate_arena_guide()
 
-elif args['source'] == 'lts':
-    generate_learntoskate()
-
 elif args['source'] == 'all':
     report = '/tmp/ice-maker_formatted_all.csv'
     df0 = pd.DataFrame()
     df1 = generate_sk8stuff()
     df2 = generate_arena_guide()
-    df3 = generate_learntoskate()
 
-    df0 = pd.concat([df1, df2, df3], axis=0)
+    df0 = pd.concat([df1, df2], axis=0)
 
     print("Generating master report to", report)
     df0.to_csv(report, sep=';', encoding='utf-8', index=False, header=False)
 
 else:
     print('No Known Source Specified')
+
+#print(generate_sk8stuff())

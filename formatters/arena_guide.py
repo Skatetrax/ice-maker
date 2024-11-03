@@ -37,14 +37,8 @@ def process_arena_guide():
                     engine='python',
                     names=["Name", "Address", "street", "city", "state"])
 
-    # remove any UTF-8 wierdness from WP scraping
-    df['Name'] = df['Name'].apply(common.reset_utf8)
-
     # drop any obvious dupes, they're going to happen
     # and apply some normalization to the address section
-
-    df['city'] = df['city'].apply(common.country_us._remove_punctuation)
-    df['street'] = df['street'].apply(common.country_us._remove_punctuation)
     df = df.drop_duplicates()
     df['Address'] = df['Address'].apply(address_formatter)
 
@@ -55,9 +49,6 @@ def process_arena_guide():
 
     # convert any full length state name to two letter abbreviation
     df['state'] = df['state'].map(lambda x: states.get(x, x))
-    df['street'] = df['street'].map(common.country_us._lookup_words)
-
-    df['Name'] = df['Name'].apply(common.country_us._expand_rec_ctrs)
 
     # remove any row w/o all fields preset (because they failed to parse)
     df = df.dropna()
