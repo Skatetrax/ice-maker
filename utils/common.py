@@ -189,6 +189,22 @@ class country_us(object):
             output_text = input_text
         return output_text
 
+    def _expand_rec_ctrs(input_text):
+        abbr_dict = {'rec': 'recreation', 'ctr': 'center'}
+
+        try:
+            words = input_text.casefold().split()
+            new_words = []
+            for word in words:
+                if word.casefold() in abbr_dict:
+                    word = abbr_dict[word.casefold()]
+                new_words.append(word)
+            new_text = " ".join(new_words).title()
+        except:
+            new_text = input_text
+
+        return new_text
+
 
 def reset_utf8(input_text):
     try:

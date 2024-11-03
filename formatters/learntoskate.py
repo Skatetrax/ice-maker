@@ -42,6 +42,8 @@ def process_lts():
     df['street'] = df['street'].apply(address_formatter)
     df['street'] = df.apply(lambda row: row.street['street'], axis=1)
 
+    df['name'] = df['name'].apply(common.country_us._expand_rec_ctrs)
+
     # remove any row w/o all fields preset (because they failed to parse)
     df = df.dropna()
     # delete the old address blob to clean up & drop any remaining dupes

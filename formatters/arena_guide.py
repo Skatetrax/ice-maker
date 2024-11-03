@@ -57,6 +57,8 @@ def process_arena_guide():
     df['state'] = df['state'].map(lambda x: states.get(x, x))
     df['street'] = df['street'].map(common.country_us._lookup_words)
 
+    df['Name'] = df['Name'].apply(common.country_us._expand_rec_ctrs)
+
     # remove any row w/o all fields preset (because they failed to parse)
     df = df.dropna()
     # delete the old address blob to clean up & drop any remaining dupes
