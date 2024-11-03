@@ -31,7 +31,6 @@ def aggr_lts():
             update_rink = {"Name": ' '}
             update_rink.update(rink)
             rinks.append(update_rink)
-
     return rinks
 
 
