@@ -7,6 +7,7 @@ import numpy as np
 def address_formatter(x):
     # keep x for error reporting, use address for
     # processing/assembling data
+    source = 'arena-guide'
     address = x
 
     try:
@@ -20,8 +21,16 @@ def address_formatter(x):
             'state': address['StateName']
             }
 
-    except:
-        print("failed to parse:", x)
+    except usaddress.RepeatedLabelError as error:
+        error = error.parsed_string
+        message = f'error parsing "{x}" from "{source}": \n {error}'
+        common.ice_maker_logging.fomatter_errors(message)
+        results = {'street': np.nan, 'city': np.nan, 'state': np.nan}
+
+    except (KeyError, TypeError) as error:
+        error = error.args
+        message = f'failed to parse {x} from "{source}", "{error}"'
+        common.ice_maker_logging.fomatter_errors(message)
         results = {'street': np.nan, 'city': np.nan, 'state': np.nan}
 
     return results

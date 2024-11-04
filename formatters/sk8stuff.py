@@ -7,6 +7,7 @@ from utils import common
 def address_formatter(x):
     # keep x for error reporting, use address for
     # processing/assembling data
+    source = 'sk8stuff'
     address = x
 
     try:
@@ -14,8 +15,17 @@ def address_formatter(x):
         address = address[0]
         street = address['StreetName'] + ' ' + address['StreetNamePostType']
         results = {'street': street}
-    except:
-        print("failed to parse:", x)
+
+    except usaddress.RepeatedLabelError as error:
+        error = error.parsed_string
+        message = f'error parsing "{x}" from "{source}": \n {error}'
+        common.ice_maker_logging.fomatter_errors(message)
+        results = {'street': np.nan}
+
+    except (KeyError, TypeError) as error:
+        error = error.args
+        message = f'failed to parse {x} from "{source}", "{error}"'
+        common.ice_maker_logging.fomatter_errors(message)
         results = {'street': np.nan}
 
     return results
@@ -25,10 +35,12 @@ def process_sk8stuff():
     csv_data = '/tmp/ice-maker_raw_csv_sk8stuff.csv'
 
     # Load the data of csv
-    df = pd.read_csv(csv_data,
-                    sep=';',
-                    engine='python',
-                    names=["Name", "street", "city", "state"])
+    df = pd.read_csv(
+        csv_data,
+        sep=';',
+        engine='python',
+        names=["Name", "street", "city", "state"]
+        )
 
     # remove any UTF-8 wierdness from WP scraping
     df['Name'] = df['Name'].apply(common.reset_utf8)

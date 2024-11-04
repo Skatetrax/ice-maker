@@ -1,5 +1,5 @@
 import re
-
+import logging
 
 # add some locale data
 
@@ -212,3 +212,9 @@ def reset_utf8(input_text):
     except:
         output_text = input_text
     return output_text
+
+
+class ice_maker_logging(object):
+    def fomatter_errors(error):
+        logging.basicConfig(filename='/tmp/ice-maker_formatter.log', level=logging.INFO, format='%(message)s')
+        logging.info(error)

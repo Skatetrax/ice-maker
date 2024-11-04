@@ -7,6 +7,7 @@ from utils import common
 def address_formatter(x):
     # keep x for error reporting, use address for
     # processing/assembling data
+    source = 'learntoskate'
     address = x
 
     try:
@@ -14,8 +15,17 @@ def address_formatter(x):
         address = address[0]
         street = address['StreetName'] + ' ' + address['StreetNamePostType']
         results = {'street': street}
-    except:
-        print("failed to parse:", x)
+
+    except usaddress.RepeatedLabelError as error:
+        error = error.parsed_string
+        message = f'error parsing "{x}" from "{source}": \n {error}'
+        common.ice_maker_logging.fomatter_errors(message)
+        results = {'street': np.nan}
+
+    except (KeyError, TypeError) as error:
+        error = error.args
+        message = f'failed to parse {x} from "{source}", "{error}"'
+        common.ice_maker_logging.fomatter_errors(message)
         results = {'street': np.nan}
 
     return results
