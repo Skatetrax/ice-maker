@@ -42,10 +42,12 @@ def process_arena_guide():
     csv_data = '/tmp/ice-maker_raw_csv_arena-guide.csv'
 
     # Load the data of csv
-    df = pd.read_csv(csv_data,
-                    sep=';',
-                    engine='python',
-                    names=["Name", "Address", "street", "city", "state"])
+    df = pd.read_csv(
+        csv_data,
+        sep=';',
+        engine='python',
+        names=["Name", "Address", "street", "city", "state"]
+        )
 
     # remove any UTF-8 wierdness from WP scraping
     df['Name'] = df['Name'].apply(common.reset_utf8)

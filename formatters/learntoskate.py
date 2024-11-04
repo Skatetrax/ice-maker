@@ -35,10 +35,12 @@ def process_lts():
     csv_data = '/tmp/ice-maker_raw_csv_lts.csv'
 
     # Load the data of csv
-    df = pd.read_csv(csv_data,
-                    sep=';',
-                    engine='python',
-                    names=["name", "street", "city", "state"])
+    df = pd.read_csv(
+        csv_data,
+        sep=';',
+        engine='python',
+        names=["name", "street", "city", "state"]
+        )
 
     # remove any UTF-8 wierdness from WP scraping
     df['name'] = df['name'].apply(common.reset_utf8)

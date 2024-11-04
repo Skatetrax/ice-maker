@@ -34,6 +34,7 @@ def address_formatter(x):
 def process_sk8stuff():
     csv_data = '/tmp/ice-maker_raw_csv_sk8stuff.csv'
 
+
     # Load the data of csv
     df = pd.read_csv(
         csv_data,
@@ -62,3 +63,4 @@ def process_sk8stuff():
     df = df.drop_duplicates()
 
     return df
+
