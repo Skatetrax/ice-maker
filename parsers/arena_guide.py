@@ -1,3 +1,4 @@
+from tqdm import tqdm
 import bs4
 import requests
 import json
@@ -111,7 +112,7 @@ def pull_arena_guide_content():
     rink_names = []
     rink_addresses = []
 
-    for i in range(pages):
+    for i in tqdm(range(pages)):
         page_number = i + 1
         content = arena_guide_request(page_number)
         soup = bs4.BeautifulSoup(content['content'], "lxml")

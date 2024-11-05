@@ -10,6 +10,7 @@ beautifulsoup4 = "*"
 usaddress = "*"
 psycopg2  = "*"
 lxml = "*"
+tqdm = "*"
 
 [dev-packages]
 
