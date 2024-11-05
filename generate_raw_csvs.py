@@ -29,7 +29,6 @@ def generate_sk8stuff():
 
 def generate_arena_guide():
     print('Generating RAW CSV for Arena-Guide...')
-    print('This report can take around 20 minutes to create...')
 
     path = '/tmp/ice-maker_raw_csv_arena-guide.csv'
     arena_guide.arena_guide_csv(path)

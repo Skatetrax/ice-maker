@@ -52,25 +52,37 @@ def generate_sk8stuff():
 
 
 if args['source'] == 'sk8stuff':
-    generate_sk8stuff()
+    try:
+        generate_sk8stuff()
+    except FileNotFoundError:
+        print('No RAW files found, did you run "generate_raw_csvs.py"?')
 
 elif args['source'] == 'arena_guide':
-    generate_arena_guide()
+    try:
+        generate_arena_guide()
+    except FileNotFoundError:
+        print('No RAW files found, did you run "generate_raw_csvs.py"?')
 
 elif args['source'] == 'lts':
-    generate_learntoskate()
+    try:
+        generate_learntoskate()
+    except FileNotFoundError:
+        print('No RAW files found, did you run "generate_raw_csvs.py"?')
 
 elif args['source'] == 'all':
     report = '/tmp/ice-maker_formatted_all.csv'
     df0 = pd.DataFrame()
-    df1 = generate_sk8stuff()
-    df2 = generate_arena_guide()
-    df3 = generate_learntoskate()
+    try:
+        df1 = generate_sk8stuff()
+        df2 = generate_arena_guide()
+        df3 = generate_learntoskate()
 
-    df0 = pd.concat([df1, df2, df3], axis=0)
+        df0 = pd.concat([df1, df2, df3], axis=0)
 
-    print("Generating master report to", report)
-    df0.to_csv(report, sep=';', encoding='utf-8', index=False, header=False)
+        print("Generating master report to", report)
+        df0.to_csv(report, sep=';', encoding='utf-8', index=False, header=False)
+    except FileNotFoundError:
+        print('No RAW files found, did you run "generate_raw_csvs.py"?')
 
 else:
     print('No Known Source Specified')

@@ -1,4 +1,6 @@
 from utils import common
+from tqdm import tqdm
+
 import requests
 import bs4
 import csv
@@ -47,7 +49,7 @@ def aggr_sk8stuff():
 
     rinks = []
     states = common.country_us.states
-    for state in states:
+    for state in tqdm(states):
         rinks.append(pull_sk8stuff(state))
 
     return rinks

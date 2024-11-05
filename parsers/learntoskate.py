@@ -1,3 +1,4 @@
+from tqdm import tqdm
 import requests
 import csv
 
@@ -24,7 +25,7 @@ def pull_lts_data(stateID):
 
 def aggr_lts():
     rinks = []
-    for i in range(50):
+    for i in tqdm(range(50)):
         stateID = i + 1
         state_data = pull_lts_data(stateID)
         for rink in state_data:
