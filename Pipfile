@@ -4,14 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+sqlalchemy = "*"
 pandas = "*"
 requests = "*"
 beautifulsoup4 = "*"
 usaddress = "*"
-psycopg2  = "*"
+psycopg2-binary = "*"
 lxml = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-cov = "*"
+responses = "*"
 
 [requires]
-python_version = "3.12"
+python_version = "3.13"

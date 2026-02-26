@@ -1,80 +1,82 @@
-from utils import common
 import requests
 import bs4
 import csv
+import logging
+
+logger = logging.getLogger(__name__)
+
+SK8STUFF_URL = 'https://sk8stuff.com/utility/lister_rinks.php'
 
 
-def pull_sk8stuff(state):
+def pull_sk8stuff():
     '''
-    this function takes an abbreviate state name and searches sk8erstuff
-    each result is added as an element to the 'rink' list
-    function returns a list of dicts - every rink in the provide state
+    Fetch the full rink list from sk8stuff in a single request.
+    The PHP page returns every rink in one HTML table with columns:
+    Rink Name | Street | City/State/Zip | Rink Phone | Map
     '''
-
     rinks = []
-    url = 'http://sk8stuff.com/utility/lister_rinks.asp?stap={}'.format(state)
-    req = requests.get(url)
-    # req.status_code
+
+    req = requests.get(SK8STUFF_URL)
+    req.raise_for_status()
+
     soup = bs4.BeautifulSoup(req.text, 'html.parser')
+    tables = soup.find_all('table')
 
-    table = soup.find_all('table')[0]
-    rows = table.find_all('tr')
+    if not tables:
+        logger.warning("No table found at %s", SK8STUFF_URL)
+        return rinks
 
-    for row in rows[2:]:
-        # replace and 'fix' wierd characters
+    rows = tables[0].find_all('tr')
+    skipped = 0
+
+    for row in rows[1:]:
         cells = row.find_all('td')
-        name = cells[0].text
-        street = cells[1].text
-        rink_name = name.strip().replace(';', ' -').replace(',', ' -')
-        rink_street = street.strip().replace(',', ' ').replace("\n", " ")
-        rink_city_state = cells[2].text.strip()
-        rink_city = rink_city_state.rsplit(' ', 1)[0]
-        rink = {'name': rink_name,
-                'street': rink_street,
-                'city': rink_city,
-                'state': state}
-        rinks.append(rink)
+        if len(cells) < 3:
+            skipped += 1
+            continue
 
-    return rinks
+        rink_name = cells[0].text.strip().replace(';', ' -').replace(',', ' -')
+        rink_street = cells[1].text.strip().replace(',', ' ').replace("\n", " ")
+        city_state = cells[2].text.strip()
 
+        # "City/State/Zip" column is typically "CityName ST" or "CityName ST 12345"
+        parts = city_state.rsplit(' ', 1)
+        if len(parts) == 2:
+            rink_city, rink_state = parts
+        else:
+            rink_city = city_state
+            rink_state = ''
 
-def aggr_sk8stuff():
-    '''
-    This function simply fetches all
-    rinks via sk8stuff for all states
-    returns lists of dicts
-    '''
+        if not rink_name or 'Junk Rink' in rink_name:
+            skipped += 1
+            continue
 
-    rinks = []
-    states = common.country_us.states
-    for state in states:
-        rinks.append(pull_sk8stuff(state))
+        rinks.append({
+            'name': rink_name,
+            'street': rink_street,
+            'city': rink_city,
+            'state': rink_state
+        })
 
+    logger.info("sk8stuff: %d rinks collected, %d rows skipped", len(rinks), skipped)
     return rinks
 
 
 def sk8stuff_csv(path):
     '''
-    produces a csv file of the data pulled directly from sk8stuff.
-    use this file as a cache or direct data processing
+    Produces a csv file of the data pulled directly from sk8stuff.
+    Use this file as a cache or direct data processing.
     '''
-    data = aggr_sk8stuff()
+    data = pull_sk8stuff()
 
-    # flatten the results
-    master_rink_list = []
-    for y in data:
-        for x in y:
-            # sk8stuff puts a dummy rink in the data
-            # so remove it.
-            if 'Junk Rink' in x['name']:
-                pass
-            else:
-                master_rink_list.append(x)
+    if not data:
+        logger.warning("No data returned, skipping CSV write")
+        return
 
     with open(path, 'w', encoding='utf8', newline='') as output_file:
         fc = csv.DictWriter(
             output_file,
-            fieldnames=master_rink_list[0].keys(),
+            fieldnames=data[0].keys(),
             delimiter=';'
             )
-        fc.writerows(master_rink_list)
+        fc.writerows(data)

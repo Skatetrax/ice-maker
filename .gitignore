@@ -160,7 +160,10 @@ k8s/secret.yaml
 output/
 tmp/
 *.json
+*.csv
 *.plan.md
+.~lock.*
+KNOWN_ISSUES.md
 feature_cards/
 
 # Cursor IDE
