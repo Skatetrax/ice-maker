@@ -2,7 +2,12 @@ import parsers.sk8stuff as sk8stuff
 import parsers.arena_guide as arena_guide
 import parsers.learntoskate as lts
 import argparse
+import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s  %(name)s  %(levelname)s  %(message)s'
+)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--source", help="show some useful help text")

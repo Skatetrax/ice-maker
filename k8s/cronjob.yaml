@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ice-maker
+  labels:
+    app: ice-maker
+    part-of: skatetrax
+spec:
+  schedule: "0 4 * * *"          # 4 AM UTC daily
+  concurrencyPolicy: Forbid       # skip if prior run still active
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app: ice-maker
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: ice-maker
+            image: ice-maker:latest
+            args:
+            - "--source"
+            - "all"
+            envFrom:
+            - secretRef:
+                name: ice-maker-secrets
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "100m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"

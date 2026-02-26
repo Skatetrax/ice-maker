@@ -154,6 +154,21 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# ice-maker
+icemaker_staging.db
+k8s/secret.yaml
+output/
+tmp/
+*.json
+*.csv
+*.plan.md
+.~lock.*
+KNOWN_ISSUES.md
+feature_cards/
+
+# Cursor IDE
+.cursor/
+
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
