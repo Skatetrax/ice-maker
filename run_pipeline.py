@@ -134,10 +134,11 @@ mode.add_argument('--sync-ice-time', action='store_true',
                        '(requires SKATETRAX_DB_URL)')
 mode.add_argument('--repair-failed', action='store_true',
                   help='Re-parse geocode_failed candidates with fixed parser')
-mode.add_argument('--push-to-skatetrax', action='store_true',
-                  help='Push active locations into the Skatetrax DB '
-                       '(requires SKATETRAX_DB_URL)')
 
+parser.add_argument('--push-to-skatetrax', action='store_true',
+                    help='Push active locations into the Skatetrax DB '
+                         '(requires SKATETRAX_DB_URL). Can be combined with '
+                         '--source to scrape then push in one run.')
 parser.add_argument('--export-csv', type=str, metavar='PATH',
                     help='Export locations table to CSV at the given path '
                          '(can be combined with other operations)')
@@ -157,14 +158,13 @@ args = parser.parse_args()
 has_mode = (
     args.source or args.geocode_pending or args.promote
     or args.sync_ice_time or args.repair_failed
-    or args.push_to_skatetrax
 )
 
-if not has_mode and not args.export_csv:
+if not has_mode and not args.push_to_skatetrax and not args.export_csv:
     parser.error(
         'Provide a pipeline operation (--source, --geocode-pending, '
-        '--promote, --sync-ice-time, --repair-failed) '
-        'and/or --export-csv PATH'
+        '--promote, --sync-ice-time, --repair-failed), '
+        '--push-to-skatetrax, and/or --export-csv PATH'
     )
 
 stats = {}
@@ -178,8 +178,6 @@ if has_mode:
         stats = sync_ice_time()
     elif args.repair_failed:
         stats = repair_geocode_failed()
-    elif args.push_to_skatetrax:
-        stats = push_locations(dry_run=args.dry_run)
     elif args.source == 'all':
         stats = _run_all(args)
     else:
@@ -192,6 +190,12 @@ if has_mode:
 
     print("\n=== Pipeline Results ===")
     for key, value in stats.items():
+        print(f"  {key}: {value}")
+
+if args.push_to_skatetrax:
+    push_stats = push_locations(dry_run=args.dry_run)
+    print("\n=== Push Results ===")
+    for key, value in push_stats.items():
         print(f"  {key}: {value}")
 
 if args.export_csv:
