@@ -13,6 +13,7 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 1
+      activeDeadlineSeconds: 14400  # 4 hour hard limit
       template:
         metadata:
           labels:
@@ -21,10 +22,12 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: ice-maker
-            image: ice-maker:latest
+            image: younga8699/ice-maker:latest
+            imagePullPolicy: Always
             args:
             - "--source"
             - "all"
+            - "--push-to-skatetrax"
             envFrom:
             - secretRef:
                 name: ice-maker-secrets
